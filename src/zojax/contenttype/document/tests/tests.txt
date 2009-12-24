@@ -1,0 +1,75 @@
+========
+Document
+========
+
+    >>> from zope import component, interface, event
+    >>> from zope.testbrowser.testing import Browser
+    >>> from zope.lifecycleevent import ObjectCreatedEvent
+    >>> from zojax.content.space.content import ContentSpace
+
+    >>> root = getRootFolder()
+    >>> space = ContentSpace(title=u'Space')
+    >>> event.notify(ObjectCreatedEvent(space))
+    >>> root['space'] = space
+
+    >>> actor = Browser()
+    >>> actor.handleErrors = False
+    >>> actor.addHeader("Authorization", "Basic mgr:mgrpw")
+
+
+Install product
+
+    >>> actor.open("http://localhost/settings/")
+    >>> actor.getLink('Products management').click()
+    >>> actor.getControl(name='availproducts:list').value = ['zojax-contenttypes']
+    >>> actor.getControl(name='install').click()
+
+    >>> actor.open("http://localhost/space/context.html/content/")
+    >>> actor.getLink('Workspaces').click()
+    >>> actor.getControl(name="workspaces.widgets.workspaces:list").value = ['documents']
+    >>> actor.getControl(name="content.edit.buttons.save").click()
+
+
+Add document
+
+    >>> actor.open("http://localhost/space/documents/+/contenttype.document/")
+    >>> actor.reload()
+    >>> actor.getControl('Title').value = u'Test page'
+    >>> actor.getControl('Body').value = u'Page body'
+    >>> actor.getControl('Short Name').value = 'front-page'
+    >>> actor.getControl('Publish').click()
+
+
+View
+
+    >>> print actor.contents
+    <!DOCTYPE html PUBLIC
+    ...
+    ...<h1 class="z-content-title">Test page</h1>...
+    <div>Page body</div>
+    ...
+    </html>
+
+Edit
+
+    >>> actor.open("http://localhost/space/documents/front-page/context.html")
+    >>> actor.getLink('Content').click()
+    >>> actor.getControl('Title').value = 'New page'
+    >>> actor.getControl('Body').value = u'Content document body'
+    >>> actor.getControl(name='content.edit.buttons.save').click()
+
+    >>> actor.open("http://localhost/space/documents/front-page/")
+    >>> print actor.contents
+    <!DOCTYPE html PUBLIC
+    ...
+    ...<h1 class="z-content-title">New page</h1>...
+    <div>Content document body</div>
+    ...
+    </html>
+
+Unistall product
+
+    >>> actor.open("http://localhost/settings/")
+    >>> actor.getLink('Products management').click()
+    >>> actor.getControl(name='products:list').value = ['zojax-contenttypes']
+    >>> actor.getControl(name='uninstall').click()

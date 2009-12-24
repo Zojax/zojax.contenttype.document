@@ -1,0 +1,14 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zcml="http://namespaces.zope.org/zcml"
+   zcml:condition="installed zojax.content.revision">
+
+  <class class=".document.Document">
+    <implements interface="zojax.content.revision.interfaces.IRevisionsAware" />
+  </class>
+
+  <adapter
+     name="text"
+     factory=".revision.TextContentData" />
+
+</configure>

@@ -1,0 +1,75 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.contenttypes">
+
+  <registerIn registry="zojax.product.zojax-contenttypes">
+
+    <zojax:content
+       title="Document"
+       name="contenttype.document"
+       schema=".interfaces.IDocument"
+       class=".document.Document"
+       contenttype=".interfaces.IDocumentType"
+       type="zojax.content.type.interfaces.IActivePortalType
+	     zojax.content.documents.interfaces.IDocumentType"
+       description="A document in the site. Can contain rich text."
+       permission="zojax.AddDocuments" />
+
+    <class class=".document.Document">
+      <implements interface="zojax.ownership.interfaces.IOwnerAware" />
+      <implements interface="zojax.activity.interfaces.IActivityAware" />
+      <implements interface="zojax.content.type.interfaces.IShareableContent" />
+      <implements interface="zojax.content.type.interfaces.ISearchableContent" />
+      <implements interface="zojax.content.type.interfaces.ITitleBasedName" />
+
+      <require
+	 permission="zope.View"
+	 interface=".interfaces.IDocument
+		    zojax.content.type.interfaces.IItemPublishing" />
+
+      <require
+	 permission="zojax.ModifyContent"
+	 set_schema=".interfaces.IDocument
+		     zojax.content.type.interfaces.IItemPublishing"
+	 interface="zojax.content.revision.interfaces.IRevisionsManagement" />
+      
+      <require
+	 permission="zojax.ViewContentRevisions"
+	 interface="zojax.content.revision.interfaces.IRevisions" />
+    </class>
+
+    <adapter factory=".document.Sized" />
+    <adapter factory=".document.DocumentSearchableText" />
+
+    <browser:icon
+       name="zmi_icon"
+       for=".interfaces.IDocument"
+       file="document.png" />
+
+    <browser:icon
+       name="zmi_icon"
+       for=".interfaces.IDocumentType"
+       file="document.png" />
+    
+    <zojax:pagelet
+       name="index.html"
+       for=".interfaces.IDocument"
+       template="document.pt"
+       provides="zojax.content.type.interfaces.IContentView"
+       permission="zope.View" />
+
+    <!-- draft support -->
+    <zojax:draft
+       content="contenttype.document"
+       publish="zojax.AddDocuments"
+       submit="zojax.SubmitDocuments"
+       retract="zojax.RetractDocuments" />
+
+  </registerIn>
+
+  <!-- event capabilities -->
+  <include file="capability.zcml" />
+
+</configure>

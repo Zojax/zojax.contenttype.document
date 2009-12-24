@@ -1,0 +1,9 @@
+<tal:block i18n:domain="zojax.contenttypes" tal:define="text context/text">
+  <p tal:condition="not:text" class="discreet" i18n:translate="">
+    This item does not have any body text, click the edit tab to change it.
+  </p>
+      
+  <div tal:condition="text" tal:content="structure text/cooked">
+    Body Text
+  </div>
+</tal:block>

@@ -25,7 +25,6 @@
       <implements interface="zojax.activity.interfaces.IActivityAware" />
       <implements interface="zojax.content.type.interfaces.IShareableContent" />
       <implements interface="zojax.content.type.interfaces.ISearchableContent" />
-      <implements interface="zojax.content.type.interfaces.IDraftedContent" />
       <implements interface="zojax.content.type.interfaces.ITitleBasedName" />
 
       <require

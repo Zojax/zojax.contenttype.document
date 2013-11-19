@@ -44,3 +44,39 @@ class IDocument(interface.Interface):
 
 class IDocumentType(interface.Interface):
     """ document content type """
+
+
+class IAdvancedDocumentType(IDocumentType):
+    """ document content type """
+
+
+class IDocumentTab(interface.Interface):
+
+    title = interface.Attribute("Object's Title")
+
+    text = RichText(
+        title=_(u'Text'),
+        description=_(u'Blog post body text.'),
+        required=False)
+
+    position = schema.TextLine(
+        title=_(u'Position'),
+        required=False)
+
+
+class IAdvancedDocument(IDocument):
+    """ document content type """
+    text = interface.Attribute("Object's Text")
+
+    tabs = schema.List(
+        title=_(u"Tabs"),
+        value_type=schema.Object(
+            title=_(u'tab'),
+            schema=IDocumentTab),
+        default=[],
+        required=False)
+
+    rich_text = RichText(
+        title = _(u'Bodysdlfnsdkfh'),
+        description = _(u'Document body text.'),
+        required = True)

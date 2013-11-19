@@ -7,20 +7,19 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <registerIn registry="zojax.product.zojax-contenttypes">
 
     <zojax:content
-       title="Document"
-       name="contenttype.document"
-       schema=".interfaces.IDocument"
-       class=".document.Document"
-       contenttype=".interfaces.IDocumentType"
+       title="Advanced Document"
+       name="contenttype.advanced_document"
+       schema=".interfaces.IAdvancedDocument"
+       class=".advanced_document.AdvancedDocument"
+       contenttype=".interfaces.IAdvancedDocumentType"
        type="zojax.content.type.interfaces.IActivePortalType
-	     zojax.content.documents.interfaces.IDocumentType"
+	     zojax.content.documents.interfaces.IAdvancedDocumentType"
        description="A document in the site. Can contain rich text."
        permission="zojax.AddDocuments" />
 
-    <class class=".document.Document">
+    <class class=".advanced_document.AdvancedDocument">
       <implements interface="zojax.ownership.interfaces.IOwnerAware" />
       <implements interface="zojax.activity.interfaces.IActivityAware" />
       <implements interface="zojax.content.type.interfaces.IShareableContent" />
@@ -29,12 +28,12 @@
 
       <require
 	 permission="zope.View"
-	 interface=".interfaces.IDocument
+	 interface=".interfaces.IAdvancedDocument
 		    zojax.content.type.interfaces.IItemPublishing" />
 
       <require
 	 permission="zojax.ModifyContent"
-	 set_schema=".interfaces.IDocument
+	 set_schema=".interfaces.IAdvancedDocument
 		     zojax.content.type.interfaces.IItemPublishing"
 	 interface="zojax.content.revision.interfaces.IRevisionsManagement" />
 
@@ -43,40 +42,36 @@
 	 interface="zojax.content.revision.interfaces.IRevisions" />
     </class>
 
-    <adapter factory=".document.Sized" />
-    <adapter factory=".document.DocumentSearchableText" />
+    <adapter factory=".advanced_document.Sized" />
+    <adapter factory=".advanced_document.DocumentSearchableText" />
+
+    <class class=".advanced_document.DocumentTab">
+      <allow interface=".interfaces.IDocumentTab" />
+    </class>
 
     <browser:icon
        name="zmi_icon"
-       for=".interfaces.IDocument"
+       for=".interfaces.IAdvancedDocument"
        file="document.png" />
 
     <browser:icon
        name="zmi_icon"
-       for=".interfaces.IDocumentType"
+       for=".interfaces.IAdvancedDocumentType"
        file="document.png" />
-
+    
     <zojax:pagelet
        name="index.html"
-       for=".interfaces.IDocument"
+       for=".interfaces.IAdvancedDocument"
        template="document.pt"
        provides="zojax.content.type.interfaces.IContentView"
        permission="zope.View" />
 
     <!-- draft support -->
     <zojax:draft
-       content="contenttype.document"
+       content="contenttype.advanced_document"
        publish="zojax.AddDocuments"
        submit="zojax.SubmitDocuments"
        retract="zojax.RetractDocuments" />
 
-  </registerIn>
-
-  <!-- advanced document -->
-  <include file="advanced_document.zcml" />
-
-
-  <!-- event capabilities -->
-  <include file="capability.zcml" />
 
 </configure>

@@ -62,6 +62,7 @@ setup(name = 'zojax.contenttype.document',
                           'zojax.richtext',
                           ],
       extras_require = dict(test=['zope.app.zcmlfiles',
+                                  'zope.app.file',
                                   'zojax.contenttypes [test]']),
       include_package_data = True,
       zip_safe = False
